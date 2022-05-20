@@ -1,10 +1,13 @@
 import requests
+import json
 from bs4 import BeautifulSoup
 
 
 response = requests.get(
     'https://tw.stock.yahoo.com/class-quote?sectorId=40&exchange=TAI')
 
+# response2 = requests.get('https://tw.stock.yahoo.com/_td-stock/api/resource/StockServices.getClassQuotes;exchange=TAI;offset=30;sectorId=40?bkt=&device=desktop&ecma=modern&feature=ecmaModern%2CuseVersionSwitch%2CuseNewQuoteTabColor&intl=tw&lang=zh-Hant-TW&partner=none&prid=92gkoelh8f3m7&region=TW&site=finance&tz=Asia%2FTaipei&ver=1.2.1281&returnMeta=true')
+# print(response2.json()['data']['list'][0])
 soup = BeautifulSoup(response.text, 'lxml')
 
 date = soup.find('time').get('datatime')
@@ -38,4 +41,5 @@ for row in rows:
     else:
         percentage = percentage_element.getText()
     result.append([date, company, price, status, percentage])
-    print(result)
+
+print(result)
