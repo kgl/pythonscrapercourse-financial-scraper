@@ -6,8 +6,18 @@ from bs4 import BeautifulSoup
 response = requests.get(
     'https://tw.stock.yahoo.com/class-quote?sectorId=40&exchange=TAI')
 
-# response2 = requests.get('https://tw.stock.yahoo.com/_td-stock/api/resource/StockServices.getClassQuotes;exchange=TAI;offset=30;sectorId=40?bkt=&device=desktop&ecma=modern&feature=ecmaModern%2CuseVersionSwitch%2CuseNewQuoteTabColor&intl=tw&lang=zh-Hant-TW&partner=none&prid=92gkoelh8f3m7&region=TW&site=finance&tz=Asia%2FTaipei&ver=1.2.1281&returnMeta=true')
-# print(response2.json()['data']['list'][0])
+response2 = requests.get('https://tw.stock.yahoo.com/_td-stock/api/resource/StockServices.getClassQuotes;exchange=TAI;offset=30;sectorId=40?bkt=&device=desktop&ecma=modern&feature=ecmaModern%2CuseVersionSwitch%2CuseNewQuoteTabColor&intl=tw&lang=zh-Hant-TW&partner=none&prid=92gkoelh8f3m7&region=TW&site=finance&tz=Asia%2FTaipei&ver=1.2.1281&returnMeta=true')
+response3 = requests.get('https://tw.stock.yahoo.com/_td-stock/api/resource/StockServices.getClassQuotes;exchange=TAI;offset=60;sectorId=40?bkt=&device=desktop&ecma=modern&feature=ecmaModern%2CuseVersionSwitch%2CuseNewQuoteTabColor&intl=tw&lang=zh-Hant-TW&partner=none&prid=92gkoelh8f3m7&region=TW&site=finance&tz=Asia%2FTaipei&ver=1.2.1281&returnMeta=true')
+rows2 = response2.json()['data']['list']
+result2 = []
+for d in rows2:
+    symbolName = d['symbolName']
+    bid = d['bid']
+    change = d['change']
+    changePercent = d['changePercent']
+    result2.append([symbolName, bid, change, changePercent])
+# print(result2)
+
 soup = BeautifulSoup(response.text, 'lxml')
 
 date = soup.find('time').get('datatime')
@@ -41,5 +51,7 @@ for row in rows:
     else:
         percentage = percentage_element.getText()
     result.append([date, company, price, status, percentage])
+result.extend(result2)
+
 
 print(result)
